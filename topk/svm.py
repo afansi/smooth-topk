@@ -76,7 +76,7 @@ class MaxTop1SVM(_SVMLoss):
             output = output.reshape(*x_size)
         if reduction == 'mean':
             return output.mean()
-        elif reduction == 'sum:
+        elif reduction == 'sum':
             return output.sum()
         return output
 
@@ -105,7 +105,7 @@ class MaxTopkSVM(_SVMLoss):
             output = output.reshape(*x_size)
         if reduction == 'mean':
             return output.mean()
-        elif reduction == 'sum:
+        elif reduction == 'sum':
             return output.sum()
         return output
 
@@ -154,7 +154,7 @@ class SmoothTop1SVM(_SVMLoss):
             output = output.reshape(*x_size)
         if reduction == 'mean':
             return output.mean()
-        elif reduction == 'sum:
+        elif reduction == 'sum':
             return output.sum()
         return output
 
@@ -206,7 +206,7 @@ class SmoothTopkSVM(_SVMLoss):
             output = output.reshape(*x_size)
         if reduction == 'mean':
             return output.mean()
-        elif reduction == 'sum:
+        elif reduction == 'sum':
             return output.sum()
         return output
 
