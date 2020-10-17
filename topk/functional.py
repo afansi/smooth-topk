@@ -61,7 +61,8 @@ def Topk_Smooth_SVM(labels, k, tau, alpha=1.):
 
         X_2 = LogTensor(x_2)
         cst = x_2.data.new(1).fill_(float(alpha) / tau)
-        One_by_tau = LogTensor(ag.Variable(cst, requires_grad=False))
+        # One_by_tau = LogTensor(ag.Variable(cst, requires_grad=False))
+        One_by_tau = LogTensor(cst.requires_grad_(False))
         Loss_ = term_2 * X_2
 
         loss_pos = (term_1 * One_by_tau + Loss_).torch()
