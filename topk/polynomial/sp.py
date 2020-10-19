@@ -13,6 +13,7 @@ class LogSumExp(nn.Module):
         self.k = k
         self.p = int(1 + 0.2 * k) if p is None else p
         self.thresh = thresh
+        self.mul = Multiplication(self.k + self.p - 1)
 
         self.register_buffer('grad_k', torch.Tensor(0))
         self.register_buffer('grad_km1', torch.Tensor(0))
@@ -20,14 +21,14 @@ class LogSumExp(nn.Module):
 
     def forward(self, x):
         return LogSumExpNew_F.apply(
-            x, self.k, self.p, self.thresh, self.grad_km1, self.grad_k
+            x, self.k, self.p, self.thresh, self.grad_km1, self.grad_k, self.mul
         )
 
 
 class LogSumExpNew_F(ag.Function):
 
     @staticmethod
-    def forward(ctx, x, k, p, thresh, grad_km1, grad_k):
+    def forward(ctx, x, k, p, thresh, grad_km1, grad_k, mul):
         """
         Returns a matrix of size (2, n_samples) with sigma_{k-1} and sigma_{k}
         for each sample of the mini-batch.
@@ -37,7 +38,7 @@ class LogSumExpNew_F(ag.Function):
         ctx.thresh = thresh
         ctx.grad_km1 = grad_km1
         ctx.grad_k = grad_k
-        mul = Multiplication(k + p - 1)
+        
         
         ctx.save_for_backward(x)
 
@@ -102,7 +103,7 @@ class LogSumExpNew_F(ag.Function):
         ctx.grad_km1 = grad_km1
         ctx.grad_k = grad_k
 
-        return grad_x, None, None, None, None, None,
+        return grad_x, None, None, None, None, None, None
 
 
 
