@@ -119,8 +119,8 @@ class TestSmoothSVMTopk(unittest.TestCase):
         for k in range(2, self.k + 1):
             svm_topk_smooth_th = SmoothTopkSVM(self.n_classes, tau=self.tau, k=k)
             for scale in (1e-4, 1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4):
-                x = self.x * scale
-                x = Variable(x, requires_grad=True)
-                assert gradcheck(lambda x: svm_topk_smooth_th(x, V(self.y)),
+                x = (self.x * scale).double().clone().detach().requires_grad_(True)
+                #x = Variable(x, requires_grad=True) # V(self.y)
+                assert gradcheck(lambda x: svm_topk_smooth_th(x, self.y),
                                 (x,), atol=1e-2, rtol=1e-3, eps=max(1e-4 * scale, 1e-2)), \
                     "failed with scale={}, k={}".format(scale, k)
